@@ -131,7 +131,9 @@ at::Tensor load_textures_cuda(
     const int threads = 1024;
     const dim3 blocks ((textures_size / 3 - 1) / threads + 1);
 
-    AT_DISPATCH_FLOATING_TYPES(image.type(), "load_textures_cuda", ([&] {
+    // 'at::Tensor::type': Tensor.type() is deprecated. Instead use Tensor.options()
+    // so instead of tensor.type().scalar_type()
+    AT_DISPATCH_FLOATING_TYPES(image.scalar_type(), "load_textures_cuda", ([&] {
       load_textures_cuda_kernel<scalar_t><<<blocks, threads>>>(
           image.data<scalar_t>(),
           is_update.data<int32_t>(),
