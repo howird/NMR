@@ -2,9 +2,16 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 
-def lighting(faces, textures, intensity_ambient=0.5, intensity_directional=0.5,
-             color_ambient=(1, 1, 1), color_directional=(1, 1, 1), direction=(0, 1, 0)):
 
+def lighting(
+    faces,
+    textures,
+    intensity_ambient=0.5,
+    intensity_directional=0.5,
+    color_ambient=(1, 1, 1),
+    color_directional=(1, 1, 1),
+    direction=(0, 1, 0),
+):
     bs, nf = faces.shape[:2]
     device = faces.device
 
@@ -15,7 +22,9 @@ def lighting(faces, textures, intensity_ambient=0.5, intensity_directional=0.5,
     elif isinstance(color_ambient, np.ndarray):
         color_ambient = torch.from_numpy(color_ambient).float().to(device)
     if isinstance(color_directional, tuple) or isinstance(color_directional, list):
-        color_directional = torch.tensor(color_directional, dtype=torch.float32, device=device)
+        color_directional = torch.tensor(
+            color_directional, dtype=torch.float32, device=device
+        )
     elif isinstance(color_directional, np.ndarray):
         color_directional = torch.from_numpy(color_directional).float().to(device)
     if isinstance(direction, tuple) or isinstance(direction, list):
@@ -49,9 +58,11 @@ def lighting(faces, textures, intensity_ambient=0.5, intensity_directional=0.5,
             direction = direction[:, None, :]
         cos = F.relu(torch.sum(normals * direction, dim=2))
         # may have to verify that the next line is correct
-        light += intensity_directional * (color_directional[:, None, :] * cos[:, :, None])
+        light += intensity_directional * (
+            color_directional[:, None, :] * cos[:, :, None]
+        )
 
     # apply
-    light = light[:,:,None, None, None, :]
+    light = light[:, :, None, None, None, :]
     textures *= light
     return textures

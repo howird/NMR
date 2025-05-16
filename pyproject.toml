@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=42", "wheel", "numpy", "torch"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neural_renderer_pytorch"
+description = 'PyTorch implementation of "A 3D mesh renderer for neural networks"'
+authors = [
+    {name = "Nikolaos Kolotouros", email = "nkolot@seas.upenn.edu"}
+]
+license = {text = "MIT License"}
+requires-python = ">=3.7"
+dependencies = [
+    "numpy",
+    "torch",
+    "scikit-image"
+]
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = {attr = "neural_renderer.__version__"}
